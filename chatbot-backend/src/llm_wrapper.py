@@ -14,7 +14,6 @@ import os
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
-print(GOOGLE_API_KEY)
 
 #Initialize the model
 llm = init_chat_model("gemini-2.5-pro", model_provider="google_genai",
@@ -40,7 +39,7 @@ vector_store = Chroma(
 )
 
 #Chunking
-with open("prompts/system_prompt.md", "r") as f:
+with open("../prompts/system_prompt.md", "r") as f:
     markdown_content = f.read()
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=50)

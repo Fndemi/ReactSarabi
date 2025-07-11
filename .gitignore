@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 chatbot-backend/.env
+chatbot-backend/src/__pycache__
+chatbot-backend/src/chroma_langchain_db
