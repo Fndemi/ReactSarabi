@@ -1,14 +1,14 @@
 import React from 'react';
 import storyImage from '../assets/images/story.png'; // Assuming your story.png is in assets/images
 
-const OurStory = () => {
+const OurStory = ({ onOpenChatbot }) => { // Destructure onOpenChatbot from props
   return (
     <section id="our-story" className="py-12 md:py-16 relative bg-[#F8F1F1]">
       <article className="max-w-6xl mx-auto px-6 relative">
 
         {/* Chat Button with SVG icon */}
         <button
-          onClick={() => window.location.href='#chatbot'}
+          onClick={onOpenChatbot} // Call the passed function
           className="absolute top-6 right-6 md:top-6 md:right-6 transition-transform hover:scale-105 z-10"
           aria-label="Open chatbot"
         >
