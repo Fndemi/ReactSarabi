@@ -39,7 +39,7 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
   // Fetch bot response from FastAPI backend
   const fetchBotResponse = async (allMessages) => {
     try {
-      const response = await fetch("https://sarabi-backend.onrender.com/", {
+      const response = await fetch("https://sarabi-backend.onrender.com/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,21 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
           })),
         }),
       });
+
+      if (!response.ok) {
+        // Try to get error message from backend, else generic
+        let errorMsg = "Sorry, the server returned an error.";
+        try {
+          const errData = await response.json();
+          errorMsg = errData?.detail || errorMsg;
+        } catch {}
+        return errorMsg;
+      }
+
       const data = await response.json();
+      if (!data || typeof data.response !== "string") {
+        return "Sorry, I didn't understand the server's reply.";
+      }
       return data.response;
     } catch (error) {
       return "Sorry, I couldn't reach the server.";
