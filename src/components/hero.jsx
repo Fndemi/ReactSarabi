@@ -145,7 +145,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <section className="swiper h-[90vh] min-h-[600px] max-h-[900px] relative mt-15 mb-8" aria-label="Restaurant highlights">
+    <section className="swiper h-[90vh] min-h-[600px] max-h-[900px] relative mt-15 " aria-label="Restaurant highlights">
       <div className="swiper-wrapper">
         {/* Slide 1 - Center Image */}
         <article className="swiper-slide relative">

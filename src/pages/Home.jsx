@@ -1,12 +1,26 @@
-import Navbar from '../components/Navbar'
-import HeroCarousel from '../components/hero'
+import React, { useState } from "react";
+import Navbar from "../components/Navbar";
+import HeroCarousel from "../components/hero";
+import OurStory from "../components/story";
+import Footer from "../components/footer";
+import Chatbot from "../components/chatbot"; // Import the Chatbot component
 
-export default function Home(){
+export default function Home() {
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
-  return(
+  const toggleChatbot = () => {
+    setIsChatbotOpen(!isChatbotOpen);
+  };
+
+  return (
     <>
-    <Navbar/>
-    <HeroCarousel/>
+      <Navbar />
+      <HeroCarousel />
+      <OurStory onOpenChatbot={toggleChatbot} />{" "}
+      {/* Pass the toggle function to OurStory */}
+      <Footer />
+      {/* Render the Chatbot component and pass the state and setter */}
+      <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
     </>
-  )
+  );
 }
