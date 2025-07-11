@@ -220,7 +220,7 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
 
       {/* Chatbot Container */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-end p-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-end p-4"> {/* Removed bg-black bg-opacity-50 */}
           <div className="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden">
             {/* Chatbot Header */}
             <header className="bg-[#917474] text-white p-4 flex items-center justify-between">
