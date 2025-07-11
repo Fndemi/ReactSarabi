@@ -4,7 +4,7 @@ import order2 from "../assets/images/order2.png";
 import order3 from "../assets/images/order3.png";
 import cartImage from '../assets/images/cart.png';
 import Navbar from '../components/Navbar'
-
+import Footer from '../components/footer'
 const OrderPage = () => {
   const [cart, setCart] = useState([]);
   const [orderType, setOrderType] = useState("delivery");
@@ -283,6 +283,7 @@ const OrderPage = () => {
         </div>
       </div>
     </div>
+    <Footer/>
     </div>
   );
 };

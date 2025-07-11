@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-
+import Footer from '../components/footer';
 // Helper function for HTML escaping (good for preventing XSS)
 const escapeHtml = (text) => {
   const div = document.createElement('div');
@@ -501,6 +501,7 @@ const ReservationPage = () => {
         </div>
       )}
     </main>
+    <Footer/>
     </div>
   );
 };

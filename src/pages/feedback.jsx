@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import visitIcon from "../assets/images/visit.png"; // Assuming this path is correct
+import Footer from '../components/footer';
 
 const ContactUsPage = () => {
   const [formData, setFormData] = useState({
@@ -335,6 +336,7 @@ const ContactUsPage = () => {
           </div>
         </div>
       </main>
+      <Footer/>
     </div>
   );
 };
