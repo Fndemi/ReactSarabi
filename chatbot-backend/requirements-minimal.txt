@@ -1,0 +1,16 @@
+# Ultra-minimal requirements for Google Gemini + ChromaDB
+fastapi==0.116.1
+uvicorn==0.35.0
+pydantic==2.11.7
+python-dotenv==1.1.1
+
+# LangChain core (minimal)
+langchain-core==0.3.68
+langchain-google-genai==2.1.7
+langgraph==0.5.2
+
+# Lightweight vector store (no heavy ML dependencies!)
+chromadb==1.0.15
+
+# Essential only
+requests==2.32.4

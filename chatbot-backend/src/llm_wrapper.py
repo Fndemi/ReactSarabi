@@ -1,4 +1,3 @@
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.chat_models import init_chat_model
 from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -7,6 +6,8 @@ from langchain_core.messages import SystemMessage
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.graph import END, MessagesState, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
 
 from dotenv import load_dotenv
 import os
@@ -24,22 +25,41 @@ llm = init_chat_model("gemini-2.5-pro", model_provider="google_genai",
 
 
 #Embeddings
-embeddings = HuggingFaceEmbeddings(model_name ="all-MiniLM-L6-v2") 
+# embeddings = HuggingFaceEmbeddings(model_name ="all-MiniLM-L6-v2") 
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/embedding-001",
+    google_api_key=GOOGLE_API_KEY
+)
 
 #Graph builder
 graph_builder = StateGraph(MessagesState)
 
 
 
-# Vector store
+# Vector store with configurable persistence path
+import os
+import shutil
+chroma_db_path = os.getenv("CHROMA_DB_PATH", "./chroma_langchain_db")
+
+# Optional: Clear old ChromaDB data if switching embedding models
+# Uncomment the next 3 lines if you want to start completely fresh:
+# if os.path.exists(chroma_db_path):
+#     shutil.rmtree(chroma_db_path)
+#     print("Cleared old ChromaDB data for fresh start with new embeddings")
+
+# Use a new collection name for Google embeddings to avoid dimension mismatch
 vector_store = Chroma(
-    collection_name = "trial_collection",
+    collection_name="google_embeddings_collection",
     embedding_function=embeddings,
-    persist_directory="./chroma_langchain_db"
+    persist_directory=chroma_db_path
 )
 
 #Chunking
-with open("../prompts/system_prompt.md", "r") as f:
+# Use absolute path to work in both dev and production
+import pathlib
+current_dir = pathlib.Path(__file__).parent
+prompts_dir = current_dir.parent / "prompts"
+with open(prompts_dir / "system_prompt.md", "r") as f:
     markdown_content = f.read()
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=50)
