@@ -7,6 +7,7 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.graph import END, MessagesState, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain.embeddings import HuggingFaceHubEmbeddings
 
 
 from dotenv import load_dotenv
@@ -21,7 +22,9 @@ llm = init_chat_model("gemini-2.5-pro", model_provider="google_genai",
     google_api_key=GOOGLE_API_KEY)
 
 
-
+# embeddings = HuggingFaceHubEmbeddings(
+#     repo_id="sentence-transformers/all-MiniLM-L6-v2",
+# )
 
 
 #Embeddings
@@ -41,11 +44,10 @@ import os
 import shutil
 chroma_db_path = os.getenv("CHROMA_DB_PATH", "./chroma_langchain_db")
 
-# Optional: Clear old ChromaDB data if switching embedding models
-# Uncomment the next 3 lines if you want to start completely fresh:
-# if os.path.exists(chroma_db_path):
-#     shutil.rmtree(chroma_db_path)
-#     print("Cleared old ChromaDB data for fresh start with new embeddings")
+# FORCE clear old ChromaDB data - the collection is corrupted!
+if os.path.exists(chroma_db_path):
+    shutil.rmtree(chroma_db_path)
+    print("🗑️ Cleared corrupted ChromaDB data for fresh start with Google embeddings")
 
 # Use a new collection name for Google embeddings to avoid dimension mismatch
 vector_store = Chroma(
@@ -62,7 +64,7 @@ prompts_dir = current_dir.parent / "prompts"
 with open(prompts_dir / "system_prompt.md", "r") as f:
     markdown_content = f.read()
 
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=50)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=50)
 docs = text_splitter.create_documents([markdown_content])
 
 # Index chunks
@@ -74,6 +76,7 @@ _ = vector_store.add_documents(documents=docs)
 def retrieve(query: str):
     """Retrieve information related to a query."""
     retrieved_docs = vector_store.similarity_search(query, k=2)
+    print(retrieved_docs)
     serialized = "\n\n".join(
         (f"Source: {doc.metadata}\n" f"Content: {doc.page_content}")
         for doc in retrieved_docs

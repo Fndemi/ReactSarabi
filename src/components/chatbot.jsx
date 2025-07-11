@@ -39,7 +39,7 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
   // Fetch bot response from FastAPI backend
   const fetchBotResponse = async (allMessages) => {
     try {
-      const response = await fetch("http://localhost:8000/chat", {
+      const response = await fetch("https://sarabi-backend.onrender.com/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
