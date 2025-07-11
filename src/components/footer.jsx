@@ -30,7 +30,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-[#9f7373] text-white py-12 px-6">
+    <footer className=" bg-[#9f7373] text-white py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Restaurant Info */}
         <section className="space-y-4">
