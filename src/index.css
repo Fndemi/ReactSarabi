@@ -1,2 +1,36 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  /* Custom colors defined as CSS custom properties */
+  --color-rose-brown: #A0522D;
+  --color-primary-content-bg: #E6C3C3;
+  --color-primary-form-bg: #C9A995;
+  --color-primary-accent-orange: #EB9D69;
+  --color-primary-form-label: #836262;
+
+  --animate-blink: blink 1s infinite;
+
+ 
+  @keyframes blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+ 
+}
+
+
+.typewriter-text {
+  display: inline-block;
+  position: relative;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: #EB9D69; 
+}

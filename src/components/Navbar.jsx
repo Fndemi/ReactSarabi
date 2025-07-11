@@ -31,7 +31,6 @@ const Navbar = () => {
   const toggleDarkMode = () => {
     setIsDarkMode(prevMode => !prevMode);
   };
-  // --- End Dark Mode Logic ---
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -64,15 +63,14 @@ const Navbar = () => {
     <>
       {/* Menu Overlay - visible only on mobile when menu is open */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-30 transition-all duration-300 md:hidden ${
-          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-50 z-30 transition-all duration-300 md:hidden ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          }`}
         onClick={closeMenu}
       />
 
       {/* Header */}
       <header className="bg-[#836262] text-white fixed top-0 left-0 w-full z-50 shadow-md
-                         dark:bg-[#3a2e2e] dark:text-[#f0d6d6] transition-colors duration-300">
+                          dark:bg-[#3a2e2e] dark:text-[#f0d6d6] transition-colors duration-300">
         <nav className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
           {/* Logo + Name */}
           <div className="flex items-center gap-3">
@@ -91,19 +89,16 @@ const Navbar = () => {
             aria-label="Toggle Menu"
           >
             <span
-              className={`block w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 origin-center ${
-                isMenuOpen ? 'rotate-45 translate-x-1.5 translate-y-1.5' : ''
-              }`}
+              className={`block w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-x-1.5 translate-y-1.5' : ''
+                }`}
             />
             <span
-              className={`block w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 origin-center ${
-                isMenuOpen ? 'opacity-0 scale-0' : ''
-              }`}
+              className={`block w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 origin-center ${isMenuOpen ? 'opacity-0 scale-0' : ''
+                }`}
             />
             <span
-              className={`block w-6 h-0.5 bg-white transition-all duration-300 origin-center ${
-                isMenuOpen ? '-rotate-45 translate-x-1.5 -translate-y-1.5' : ''
-              }`}
+              className={`block w-6 h-0.5 bg-white transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 translate-x-1.5 -translate-y-1.5' : ''
+                }`}
             />
           </button>
 
@@ -122,10 +117,10 @@ const Navbar = () => {
             }}
           >
             <ul className="w-full space-y-2 md:w-auto md:space-y-0 md:flex md:items-center md:gap-2 md:-ml-3">
-              {/* Navigation Items - Original Order Maintained */}
+              {/* Navigation Items - Updated to standard <a> tags */}
               <li>
                 <a
-                  href="#"
+                  href="/" // Changed from 'to' to 'href'
                   className="
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
@@ -149,8 +144,8 @@ const Navbar = () => {
                   Our Story
                 </a>
               </li>
-              
-              {/* Menu Dropdown - Maintained in original position */}
+
+              {/* Menu Dropdown - Keep as is for now since these seem to be separate HTML files */}
               <li className="w-full md:w-auto md:relative group">
                 <button
                   onClick={toggleMobileDropdown}
@@ -223,11 +218,11 @@ const Navbar = () => {
                   </li>
                 </ul>
               </li>
-              
-              {/* Remaining Navigation Items - Original Order */}
+
+              {/* Updated to standard <a> tags */}
               <li>
                 <a
-                  href="./pages/order.html"
+                  href="/order" // Changed from 'to' to 'href'
                   className="
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
@@ -240,7 +235,7 @@ const Navbar = () => {
               </li>
               <li>
                 <a
-                  href="./pages/Reservation.html"
+                  href="/reservation"
                   className="
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
@@ -253,7 +248,7 @@ const Navbar = () => {
               </li>
               <li>
                 <a
-                  href="./pages/feedback.html"
+                  href="/contact" // Changed from 'to' to 'href'
                   className="
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
@@ -266,13 +261,13 @@ const Navbar = () => {
               </li>
             </ul>
 
-            {/* Dark Mode Toggle Button - Your Favorite Version */}
+            {/* Dark Mode Toggle Button */}
             <button
               onClick={toggleDarkMode}
               className="mt-6 md:mt-0 ml-0 md:ml-4 px-4 py-2 rounded-full bg-white text-[#836262] font-medium
-                         dark:bg-[#f0d6d6] dark:text-[#3a2e2e]
-                         hover:bg-gray-100 dark:hover:bg-[#e6cbcb]
-                         transition-colors duration-300 shadow-sm"
+                          dark:bg-[#f0d6d6] dark:text-[#3a2e2e]
+                          hover:bg-gray-100 dark:hover:bg-[#e6cbcb]
+                          transition-colors duration-300 shadow-sm"
               aria-label="Toggle Dark Mode"
             >
               {isDarkMode ? (
