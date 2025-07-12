@@ -1,9 +1,9 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 const categories = [
-  { name: "Appetizers", path: "/menu/appetizers" },
-  { name: "Main Courses", path: "/menu/mains" },
-  { name: "Desserts", path: "/menu/desserts" },
+  { name: "Appetizers", path: "/appetizers" },
+  { name: "Main Courses", path: "/mains" },
+  { name: "Desserts", path: "/Desserts" },
 ];
 
 const MenuLayout = () => {

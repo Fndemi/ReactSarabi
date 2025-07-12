@@ -10,6 +10,7 @@ import Desserts from "./pages/Menu/Desserts";
 import Mains from "./pages/Menu/Mains";
 import MainDishes from "./components/main-dishes";
 import OurStory from "./components/story";
+import MenuLayout from "./pages/Menu/MenuLayout"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./index.css";
@@ -29,6 +30,7 @@ function App() {
           <Route path="/mains" element={<Mains />} />
           <Route path="/menu" element={<MainDishes />} />
           <Route path="/our-story" element={<OurStory />} />
+          <Route path="/layout" element={<MenuLayout/>}/>
         </Routes>
       </BrowserRouter>
     </>
