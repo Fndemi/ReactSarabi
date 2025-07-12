@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useNavigate
 import logo from "../assets/images/logo.png";
 
 const Navbar = () => {
+  const location = useLocation();
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+  const [isDesktopMenuHovered, setIsDesktopMenuHovered] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   // --- Dark Mode Logic ---
@@ -32,6 +36,7 @@ const Navbar = () => {
     setIsDarkMode((prevMode) => !prevMode);
   };
 
+  // --- Mobile Menu Logic ---
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (!isMenuOpen) {
@@ -59,6 +64,28 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // --- Smooth Scrolling Logic ---
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault(); // Prevent default anchor link behavior
+    closeMenu(); // Close mobile menu after clicking a link
+
+    // Check if we are already on the home page
+    if (location.pathname === "/") {
+      // If on home page, directly scroll after a small delay
+      // This delay helps ensure the element is rendered if it's dynamic
+      setTimeout(() => {
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, isMenuOpen ? 300 : 0); // Delay if mobile menu is closing
+    } else {
+      // If not on home page, navigate to home and pass the targetId in state
+      // This avoids a full page reload and allows Home.jsx to handle the scroll
+      navigate("/", { state: { scrollToId: targetId } });
+    }
+  };
+
   return (
     <>
       {/* Menu Overlay - visible only on mobile when menu is open */}
@@ -72,18 +99,18 @@ const Navbar = () => {
       {/* Header */}
       <header
         className="bg-[#836262] text-white fixed top-0 left-0 w-full z-50 shadow-md
-                          dark:bg-[#3a2e2e] dark:text-[#f0d6d6] transition-colors duration-300"
+                   dark:bg-[#3a2e2e] dark:text-[#f0d6d6] transition-colors duration-300"
       >
         <nav className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
           {/* Logo + Name */}
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3" onClick={closeMenu}>
             <img
               src={logo}
               alt="Sarabi Logo"
               className="w-10 h-10 object-cover rounded-full pl-0"
             />
             <span className="text-lg font-semibold">The Sarabi Restaurant</span>
-          </div>
+          </Link>
 
           {/* Hamburger Icon (mobile only) */}
           <button
@@ -123,36 +150,43 @@ const Navbar = () => {
             }}
           >
             <ul className="w-full space-y-2 md:w-auto md:space-y-0 md:flex md:items-center md:gap-2 md:-ml-3">
-              {/* Navigation Items - Updated to standard <a> tags */}
+              {/* Home Link */}
               <li>
-                <a
-                  href="/" // Changed from 'to' to 'href'
-                  className="
+                <Link
+                  to="/"
+                  className={`
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
                     dark:text-[#f0d6d6] dark:hover:text-white md:dark:bg-[#f0d6d6] md:dark:text-[#3a2e2e] md:dark:hover:bg-[#e6cbcb]
-                  "
+                    ${location.pathname === "/" && location.hash === "" && !location.state?.scrollToId ? "font-bold" : ""}
+                  `}
                   onClick={closeMenu}
                 >
                   Home
-                </a>
+                </Link>
               </li>
+              {/* Our Story Link - Uses smooth scrolling */}
               <li>
                 <a
-                  href="#our-story"
-                  className="
+                  href="/#our-story" // Still use anchor for href for semantic correctness and browser fallback
+                  className={`
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
                     dark:text-[#f0d6d6] dark:hover:text-white md:dark:bg-[#f0d6d6] md:dark:text-[#3a2e2e] md:dark:hover:bg-[#e6cbcb]
-                  "
-                  onClick={closeMenu}
+                    ${location.hash === "#our-story" || (location.pathname === "/" && location.state?.scrollToId === "our-story") ? "font-bold" : ""}
+                  `}
+                  onClick={(e) => handleSmoothScroll(e, "our-story")}
                 >
                   Our Story
                 </a>
               </li>
 
-              {/* Menu Dropdown - Keep as is for now since these seem to be separate HTML files */}
-              <li className="w-full md:w-auto md:relative group">
+              {/* Menu Dropdown - Desktop hover state and ORIGINAL paths */}
+              <li
+                className="w-full md:w-auto md:relative"
+                onMouseEnter={() => setIsDesktopMenuHovered(true)}
+                onMouseLeave={() => setIsDesktopMenuHovered(false)}
+              >
                 <button
                   onClick={toggleMobileDropdown}
                   className="
@@ -165,8 +199,8 @@ const Navbar = () => {
                   Menu
                   <svg
                     className={`w-4 h-4 ml-1 transition-transform duration-200
-                      ${isMobileDropdownOpen ? "rotate-180 md:rotate-0" : ""}
-                      md:group-hover:rotate-180`}
+                      ${isMobileDropdownOpen || isDesktopMenuHovered ? "rotate-180" : ""}
+                    `}
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -180,92 +214,99 @@ const Navbar = () => {
                 <ul
                   className={`
                   pl-4 space-y-1 ${isMobileDropdownOpen ? "block" : "hidden"}
-                  md:absolute md:left-0 md:top-full md:mt-1 md:hidden md:group-hover:block
+                  md:absolute md:left-0 md:top-full md:mt-1
                   md:bg-white md:text-[#836262] md:rounded-lg md:shadow-lg md:min-w-[160px] md:z-50 md:border md:border-gray-200
                   dark:bg-[#3a2e2e] dark:text-[#f0d6d6] md:dark:bg-[#f0d6d6] md:dark:text-[#3a2e2e] md:dark:border-[#d9b8b8]
+                  ${isDesktopMenuHovered ? "md:block" : "md:hidden"}
                 `}
                 >
                   <li>
-                    <a
-                      href="/appetizers"
-                      className="
+                    <Link
+                      to="/appetizers"
+                      className={`
                         text-[#B08D8D] text-base hover:text-white block py-2 transition-colors
                         md:block md:px-4 md:py-2 md:hover:bg-gray-50 md:rounded-t-lg
                         dark:text-[#5a4545] dark:hover:bg-[#4a3a3a] dark:hover:text-[#f0d6d6] md:dark:hover:bg-[#e6cbcb]
-                      "
+                        ${location.pathname === "/appetizers" ? "font-bold" : ""}
+                      `}
                       onClick={closeMenu}
                     >
                       Appetizers
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="/mains"
-                      className="
+                    <Link
+                      to="/mains"
+                      className={`
                         text-[#B08D8D] text-base hover:text-white block py-2 transition-colors
                         md:block md:px-4 md:py-2 md:hover:bg-gray-50
                         dark:text-[#5a4545] dark:hover:bg-[#4a3a3a] dark:hover:text-[#f0d6d6] md:dark:hover:bg-[#e6cbcb]
-                      "
+                        ${location.pathname === "/mains" ? "font-bold" : ""}
+                      `}
                       onClick={closeMenu}
                     >
                       Main Courses
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="/Desserts"
-                      className="
+                    <Link
+                      to="/Desserts"
+                      className={`
                         text-[#B08D8D] text-base hover:text-white block py-2 transition-colors
                         md:block md:px-4 md:py-2 md:hover:bg-gray-50 md:rounded-b-lg
                         dark:text-[#5a4545] dark:hover:bg-[#4a3a3a] dark:hover:text-[#f0d6d6] md:dark:hover:bg-[#e6cbcb]
-                      "
+                        ${location.pathname === "/Desserts" ? "font-bold" : ""}
+                      `}
                       onClick={closeMenu}
                     >
                       Desserts
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
 
-              {/* Updated to standard <a> tags */}
+              {/* Other Navigation Links */}
               <li>
-                <a
-                  href="/order" // Changed from 'to' to 'href'
-                  className="
+                <Link
+                  to="/order"
+                  className={`
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
                     dark:text-[#f0d6d6] dark:hover:text-white md:dark:bg-[#f0d6d6] md:dark:text-[#3a2e2e] md:dark:hover:bg-[#e6cbcb]
-                  "
+                    ${location.pathname === "/order" ? "font-bold" : ""}
+                  `}
                   onClick={closeMenu}
                 >
                   Order Now
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/reservation"
-                  className="
+                <Link
+                  to="/reservation"
+                  className={`
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
                     dark:text-[#f0d6d6] dark:hover:text-white md:dark:bg-[#f0d6d6] md:dark:text-[#3a2e2e] md:dark:hover:bg-[#e6cbcb]
-                  "
+                    ${location.pathname === "/reservation" ? "font-bold" : ""}
+                  `}
                   onClick={closeMenu}
                 >
                   Reservations
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/contact" // Changed from 'to' to 'href'
-                  className="
+                <Link
+                  to="/contact"
+                  className={`
                     text-white text-lg hover:text-[#f0d6d6] block py-3 transition-colors
                     md:bg-white md:text-[#836262] md:font-medium md:px-4 md:py-2 md:rounded-full md:hover:bg-gray-100 md:transition-all md:duration-300
                     dark:text-[#f0d6d6] dark:hover:text-white md:dark:bg-[#f0d6d6] md:dark:text-[#3a2e2e] md:dark:hover:bg-[#e6cbcb]
-                  "
+                    ${location.pathname === "/contact" ? "font-bold" : ""}
+                  `}
                   onClick={closeMenu}
                 >
                   Contact Us
-                </a>
+                </Link>
               </li>
             </ul>
 
@@ -273,9 +314,9 @@ const Navbar = () => {
             <button
               onClick={toggleDarkMode}
               className="mt-6 md:mt-0 ml-0 md:ml-4 px-4 py-2 rounded-full bg-white text-[#836262] font-medium
-                          dark:bg-[#f0d6d6] dark:text-[#3a2e2e]
-                          hover:bg-gray-100 dark:hover:bg-[#e6cbcb]
-                          transition-colors duration-300 shadow-sm"
+                         dark:bg-[#f0d6d6] dark:text-[#3a2e2e]
+                         hover:bg-gray-100 dark:hover:bg-[#e6cbcb]
+                         transition-colors duration-300 shadow-sm"
               aria-label="Toggle Dark Mode"
             >
               {isDarkMode ? (

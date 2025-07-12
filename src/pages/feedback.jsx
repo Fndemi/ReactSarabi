@@ -13,6 +13,9 @@ const ContactUsPage = () => {
   const [errors, setErrors] = useState({});
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+  // Define max length for the message textarea
+  const MAX_MESSAGE_LENGTH = 500; // You can adjust this value
+
   // Handle input changes for form fields
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -60,6 +63,8 @@ const ContactUsPage = () => {
           newErrors.message = "Message is required";
         } else if (value.trim().length < 10) {
           newErrors.message = "Message must be at least 10 characters long";
+        } else if (value.length > MAX_MESSAGE_LENGTH) {
+          newErrors.message = `Message cannot exceed ${MAX_MESSAGE_LENGTH} characters`;
         } else {
           delete newErrors.message;
         }
@@ -95,6 +100,8 @@ const ContactUsPage = () => {
       newErrors.message = "Message is required";
     } else if (formData.message.trim().length < 10) {
       newErrors.message = "Message must be at least 10 characters long";
+    } else if (formData.message.length > MAX_MESSAGE_LENGTH) {
+      newErrors.message = `Message cannot exceed ${MAX_MESSAGE_LENGTH} characters`;
     }
 
     setErrors(newErrors);
@@ -123,20 +130,21 @@ const ContactUsPage = () => {
         setShowSuccessMessage(false);
       }, 5000);
     } else {
-      // Scroll to the first error
-      const firstErrorField = Object.keys(errors).find((key) => errors[key]);
-      if (firstErrorField) {
-        const errorElement = document.getElementById(firstErrorField);
+      // Focus on the first error field
+      const firstErrorFieldId = Object.keys(errors).find((key) => errors[key]);
+      if (firstErrorFieldId) {
+        const errorElement = document.getElementById(firstErrorFieldId);
         if (errorElement) {
           errorElement.scrollIntoView({
             behavior: "smooth",
             block: "center",
           });
-          errorElement.focus();
+          errorElement.focus(); // Focus on the element with the error
         }
       }
     }
   };
+
   return (
     <div className="bg-rose-brown min-h-screen dark:bg-[#2c2222] transition-colors duration-300">
       <Navbar /> {/* Render the Navbar component here */}
@@ -366,8 +374,13 @@ const ContactUsPage = () => {
                   value={formData.message}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  maxLength={MAX_MESSAGE_LENGTH} // Add maxLength attribute
                   required
                 ></textarea>
+                {/* Character Counter for Message */}
+                <div className="text-gray-600 text-xs text-right mt-1 dark:text-[#d9b8b8]">
+                  {formData.message.length}/{MAX_MESSAGE_LENGTH} characters
+                </div>
                 {errors.message && (
                   <div className="error-message text-red-600 text-sm mt-1">
                     {errors.message}

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar"; // Navbar is rendered here in your current setup
 import HeroCarousel from "../components/hero";
-import OurStory from "../components/story";
-import Footer from "../components/footer";
-import Chatbot from "../components/chatbot"; // Import the Chatbot component
+import OurStory from "../components/story"; // Import the OurStory component
+import Footer from "../components/footer"; // Footer is rendered here in your current setup
+import Chatbot from "../components/chatbot";
 import SignatureDishes from "../components/signature-dishes";
 
 export default function Home() {
@@ -11,16 +11,22 @@ export default function Home() {
   const toggleChatbot = () => {
     setIsChatbotOpen(!isChatbotOpen);
   };
+
   return (
     <>
-      <Navbar />
+      <Navbar /> {/* Your Navbar */}
       <HeroCarousel />
-      <OurStory onOpenChatbot={toggleChatbot} />{" "}
-            <SignatureDishes/>
+      <section id="our-story" className="py-16 bg-rose-100 dark:bg-[#4a3a3a] transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+         
+          <OurStory onOpenChatbot={toggleChatbot} />
+        </div>
+      </section>
 
-      {/* Pass the toggle function to OurStory */}
-      <Footer />
-      {/* Render the Chatbot component and pass the state and setter */}
+      <SignatureDishes/>
+
+      <Footer /> 
+
       <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
     </>
   );
