@@ -23,6 +23,9 @@ const ReservationPage = () => {
   const [errors, setErrors] = useState({});
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+  // Define max length for special requests
+  const MAX_SPECIAL_REQUESTS_LENGTH = 200; // You can adjust this value
+
   // Set minimum date to today for the date input
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -367,12 +370,17 @@ const ReservationPage = () => {
                   rows="3"
                   value={formData.specialRequests}
                   onChange={handleChange}
-                  aria-describedby="specialRequests-help"
+                  maxLength={MAX_SPECIAL_REQUESTS_LENGTH} // Added maxLength
+                  aria-describedby="specialRequests-help specialRequests-char-count"
                   className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base resize-none"
                   placeholder="Please let us know any dietary restrictions, allergies, or special requests..."
                 ></textarea>
                 <div id="specialRequests-help" className="text-gray-600 text-xs sm:text-sm mt-1">Include any dietary
                   restrictions, allergies, celebrations, or other special requests.</div>
+                {/* Character Counter */}
+                <div id="specialRequests-char-count" className="text-gray-600 text-xs sm:text-sm mt-1 text-right">
+                  {formData.specialRequests.length}/{MAX_SPECIAL_REQUESTS_LENGTH} characters
+                </div>
               </fieldset>
             </div>
           </fieldset>

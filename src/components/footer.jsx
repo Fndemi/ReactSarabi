@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Import Link, useNavigate, useLocation
 import {
   FaPhone,
   FaEnvelope,
@@ -9,6 +10,8 @@ import {
 } from "react-icons/fa";
 
 const Footer = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+  const location = useLocation(); // Initialize useLocation
   const [isOpen, setIsOpen] = useState(false);
 
   // Dynamic opening hours checker
@@ -16,7 +19,7 @@ const Footer = () => {
     const checkOpeningHours = () => {
       const now = new Date();
       const currentHour = now.getHours();
-      const currentDay = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+      // const currentDay = now.getDay(); // 0 (Sunday) to 6 (Saturday) - not used in logic
 
       // Open everyday from 9:00AM (9) to 12:00AM (0)
       const isWeekdayOpen = currentHour >= 9 && currentHour < 24;
@@ -29,8 +32,27 @@ const Footer = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // --- Smooth Scrolling Logic (Copied from Navbar for consistency) ---
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault(); // Prevent default anchor link behavior
+
+    // Check if we are already on the home page
+    if (location.pathname === "/") {
+      // If on home page, directly scroll after a small delay
+      setTimeout(() => {
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100); // A small delay to ensure element is rendered
+    } else {
+      // If not on home page, navigate to home and pass the targetId in state
+      navigate("/", { state: { scrollToId: targetId } });
+    }
+  };
+
   return (
-    <footer className=" bg-[#9f7373] text-white py-12 px-6">
+    <footer className=" bg-[#9f7373] text-white py-12 px-6 dark:bg-[#3a2e2e] transition-colors duration-300">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Restaurant Info */}
         <section className="space-y-4">
@@ -93,20 +115,40 @@ const Footer = () => {
         <nav aria-label="Main navigation">
           <h3 className="text-xl font-semibold mb-4 text-white">Quick Links</h3>
           <ul className="space-y-2">
-            {[
-              "Home",
-              "Our Story",
-              "Menu",
-              "Order Now",
-              "Reservations",
-              "Contact Us",
-            ].map((link) => (
-              <li key={link}>
-                <a href="#" className="hover:text-[#e0b7b7ba] transition">
-                  {link}
-                </a>
-              </li>
-            ))}
+            <li>
+              <Link to="/" className="hover:text-[#e0b7b7ba] transition" onClick={() => navigate('/')}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <a // Use <a> for Our Story as it's handled by smoothScroll
+                href="/#our-story"
+                className="hover:text-[#e0b7b7ba] transition"
+                onClick={(e) => handleSmoothScroll(e, "our-story")}
+              >
+                Our Story
+              </a>
+            </li>
+            <li>
+              <Link to="/menu" className="hover:text-[#e0b7b7ba] transition" onClick={() => navigate('/menu')}>
+                Menu
+              </Link>
+            </li>
+            <li>
+              <Link to="/order" className="hover:text-[#e0b7b7ba] transition" onClick={() => navigate('/order')}>
+                Order Now
+              </Link>
+            </li>
+            <li>
+              <Link to="/reservation" className="hover:text-[#e0b7b7ba] transition" onClick={() => navigate('/reservation')}>
+                Reservations
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-[#e0b7b7ba] transition" onClick={() => navigate('/contact')}>
+                Contact Us
+              </Link>
+            </li>
           </ul>
         </nav>
 
@@ -115,13 +157,15 @@ const Footer = () => {
           <h3 className="text-xl font-semibold mb-4 text-white">Follow Us</h3>
           <div className="flex flex-col gap-4 mb-6">
             {[
-              { icon: <FaInstagram />, name: "Instagram" },
-              { icon: <FaFacebook />, name: "Facebook" },
-              { icon: <FaTwitter />, name: "Twitter" },
+              { icon: <FaInstagram />, name: "Instagram", url: "https://www.instagram.com/sarabirestaurant" }, // Added example URLs
+              { icon: <FaFacebook />, name: "Facebook", url: "https://www.facebook.com/sarabirestaurant" },
+              { icon: <FaTwitter />, name: "Twitter", url: "https://twitter.com/sarabirestaurant" },
             ].map((social) => (
               <a
                 key={social.name}
-                href="#"
+                href={social.url} // Use the actual social media URL
+                target="_blank" // Open in new tab
+                rel="noopener noreferrer" // Security best practice for target="_blank"
                 aria-label={social.name}
                 className="flex items-center gap-2 text-xl hover:text-[#e0b7b7ba] transition"
               >

@@ -1,9 +1,9 @@
 import React from 'react';
 import storyImage from '../assets/images/story.png'; // Assuming your story.png is in assets/images
 
-const OurStory = ({ onOpenChatbot }) => { // Destructure onOpenChatbot from props
+const OurStory = ({ onOpenChatbot }) => { // Destructure onOpenChatbot from props 
   return (
-    <section id="our-story" className="py-12 md:py-16 relative bg-[#F8F1F1]">
+    <section id="our-story" className="py-12 md:py-16 relative bg-[#F8F1F1] ">
       <article className="max-w-6xl mx-auto px-6 relative">
 
         {/* Chat Button with SVG icon */}
