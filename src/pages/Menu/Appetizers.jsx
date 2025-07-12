@@ -1,6 +1,7 @@
 import { menuItems } from "../../data/menuItems";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/footer";
+import MenuLayout from "./MenuLayout"
 
 export default function Appetizers() {
   const appetizers = menuItems.filter((item) => item.category === "appetizers");
@@ -8,6 +9,7 @@ export default function Appetizers() {
   return (
     <>
       <Navbar />
+    
       <div className="mb-15 mt-30 grid sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
         {appetizers.map((item) => (
           <article
