@@ -3,7 +3,7 @@
 A modern, full-stack web application for Sarabi Restaurant, offering a comprehensive culinary experience with seamless online ordering, reservations, and interactive customer support.
 
 ## 🌟 Live Demo
-**[Visit Sarabi Restaurant](https://fastidious-cassata-835e31.netlify.app/)**
+**[Visit Sarabi Restaurant](https://tubular-croissant-cc23db.netlify.app/)**
 
 ## 📋 Table of Contents
 - [Overview](#overview)
