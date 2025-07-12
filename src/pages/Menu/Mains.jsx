@@ -9,7 +9,6 @@ export default function Mains() {
   return (
     <>
       <Navbar />
-
       <div className="mb-15 mt-30 grid sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
         {mainDishes.map((item) => (
           <MenuItem key={item.id} item={item} />
