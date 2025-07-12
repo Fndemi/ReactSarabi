@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+chatbot-backend/.env
+chatbot-backend/src/__pycache__
+chatbot-backend/src/chroma_langchain_db
+chatbot-backend/src/debug_chroma_db

@@ -14,43 +14,7 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Expanded responses with multiple answers for each category
-  const responses = {
-    menu: {
-      popular: [
-        "Our Signature Tilapia is the most popular! Lake Victoria tilapia in coconut curry with spinach.",
-        "Many guests love our Sarabi Gourmet Beef Burger with avocado and peri-peri aioli.",
-        "The Swahili Seafood Coconut Noodles are also a crowd favorite!",
-      ],
-      vegan: [
-        "We have several vegan options including our African Lentil Bolognese!",
-        "Try our plant-based burger made with African yam and mushroom patty.",
-        "Our roasted vegetable platter with peanut sauce is completely plant-based.",
-      ],
-      chef: [
-        "Our Chef's Special is the Dry-Aged Signature Steak with herb butter!",
-        "The Pan-African Spiced Chicken Pizza is another chef recommendation.",
-        "For seafood lovers, the Lakeside Salmon with Mango Salsa is exceptional.",
-      ],
-    },
-    hours: {
-      general: "We're open daily from 9:00 AM to 12:00 AM.",
-      weekends: "On weekends we open at 8:30 AM for brunch service!",
-      holidays: "Holiday hours may vary - please call ahead on major holidays.",
-    },
-    reservations: {
-      how: "You can reserve online through our website or call us at +111 01 22 32 23",
-      group:
-        "For groups larger than 8, please call at least 24 hours in advance.",
-      cancel:
-        "Cancellations require 2 hours notice to avoid a $20 fee per person.",
-    },
-    default: [
-      "I can help with menu questions, hours, reservations and more!",
-      "Would you like to know about our most popular dishes?",
-      "Need help making a reservation? I can guide you!",
-    ],
-  };
+  // Remove hardcoded responses; use backend
 
   // Sample questions to display as quick prompts
   const sampleQuestions = [
@@ -72,8 +36,44 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
     setMessages((prev) => [...prev, { text, isUser }]);
   };
 
+  // Fetch bot response from FastAPI backend
+  const fetchBotResponse = async (allMessages) => {
+    try {
+      const response = await fetch("https://sarabi-backend.onrender.com/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: allMessages.map((msg) => ({
+            role: msg.isUser ? "user" : "assistant",
+            content: msg.text,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        // Try to get error message from backend, else generic
+        let errorMsg = "Sorry, the server returned an error.";
+        try {
+          const errData = await response.json();
+          errorMsg = errData?.detail || errorMsg;
+        } catch {}
+        return errorMsg;
+      }
+
+      const data = await response.json();
+      if (!data || typeof data.response !== "string") {
+        return "Sorry, I didn't understand the server's reply.";
+      }
+      return data.response;
+    } catch (error) {
+      return "Sorry, I couldn't reach the server.";
+    }
+  };
+
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const message = inputValue.trim();
 
@@ -82,136 +82,24 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
       setInputValue("");
       setIsTyping(true);
 
-      // Simulate bot response after delay
-      setTimeout(() => {
-        setIsTyping(false);
+      const newMessages = [...messages, { text: message, isUser: true }];
+      const botReply = await fetchBotResponse(newMessages);
 
-        let response =
-          responses.default[
-            Math.floor(Math.random() * responses.default.length)
-          ];
-        const lowerMsg = message.toLowerCase();
-
-        if (
-          lowerMsg.includes("popular") ||
-          lowerMsg.includes("best") ||
-          lowerMsg.includes("favorite")
-        ) {
-          response =
-            responses.menu.popular[
-              Math.floor(Math.random() * responses.menu.popular.length)
-            ];
-        } else if (
-          lowerMsg.includes("vegan") ||
-          lowerMsg.includes("vegetarian")
-        ) {
-          response =
-            responses.menu.vegan[
-              Math.floor(Math.random() * responses.menu.vegan.length)
-            ];
-        } else if (
-          lowerMsg.includes("hour") ||
-          lowerMsg.includes("open") ||
-          lowerMsg.includes("close")
-        ) {
-          if (lowerMsg.includes("weekend")) {
-            response = responses.hours.weekends;
-          } else {
-            response = responses.hours.general;
-          }
-        } else if (
-          lowerMsg.includes("reserv") ||
-          lowerMsg.includes("book") ||
-          lowerMsg.includes("table")
-        ) {
-          if (lowerMsg.includes("group") || lowerMsg.includes("large")) {
-            response = responses.reservations.group;
-          } else if (lowerMsg.includes("cancel")) {
-            response = responses.reservations.cancel;
-          } else {
-            response = responses.reservations.how;
-          }
-        } else if (
-          lowerMsg.includes("chef") ||
-          lowerMsg.includes("recommend") ||
-          lowerMsg.includes("special")
-        ) {
-          response =
-            responses.menu.chef[
-              Math.floor(Math.random() * responses.menu.chef.length)
-            ];
-        }
-
-        addMessage(response, false);
-      }, 1500);
+      setIsTyping(false);
+      addMessage(botReply, false);
     }
   };
 
   // Quick prompt buttons
-  const handleQuickPrompt = (prompt) => {
-    addMessage(prompt, true); // Add user message immediately
+  const handleQuickPrompt = async (prompt) => {
+    addMessage(prompt, true);
     setIsTyping(true);
 
-    // Simulate bot response
-    setTimeout(() => {
-      setIsTyping(false);
+    const newMessages = [...messages, { text: prompt, isUser: true }];
+    const botReply = await fetchBotResponse(newMessages);
 
-      const lowerMsg = prompt.toLowerCase();
-      let response =
-        responses.default[Math.floor(Math.random() * responses.default.length)];
-
-      if (
-        lowerMsg.includes("popular") ||
-        lowerMsg.includes("best") ||
-        lowerMsg.includes("favorite")
-      ) {
-        response =
-          responses.menu.popular[
-            Math.floor(Math.random() * responses.menu.popular.length)
-          ];
-      } else if (
-        lowerMsg.includes("vegan") ||
-        lowerMsg.includes("vegetarian")
-      ) {
-        response =
-          responses.menu.vegan[
-            Math.floor(Math.random() * responses.menu.vegan.length)
-          ];
-      } else if (
-        lowerMsg.includes("hour") ||
-        lowerMsg.includes("open") ||
-        lowerMsg.includes("close")
-      ) {
-        if (lowerMsg.includes("weekend")) {
-          response = responses.hours.weekends;
-        } else {
-          response = responses.hours.general;
-        }
-      } else if (
-        lowerMsg.includes("reserv") ||
-        lowerMsg.includes("book") ||
-        lowerMsg.includes("table")
-      ) {
-        if (lowerMsg.includes("group") || lowerMsg.includes("large")) {
-          response = responses.reservations.group;
-        } else if (lowerMsg.includes("cancel")) {
-          response = responses.reservations.cancel;
-        } else {
-          response = responses.reservations.how;
-        }
-      } else if (
-        lowerMsg.includes("chef") ||
-        lowerMsg.includes("recommend") ||
-        lowerMsg.includes("special")
-      ) {
-        response =
-          responses.menu.chef[
-            Math.floor(Math.random() * responses.menu.chef.length)
-          ];
-      }
-
-      addMessage(response, false);
-    }, 1500);
+    setIsTyping(false);
+    addMessage(botReply, false);
   };
 
   return (
