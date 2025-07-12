@@ -1,3 +1,12 @@
+import Chicken from "../../src/assets/images/chicken-pizza.png";
+import Burger from "../../src/assets/images/sarabi-burger.png";
+import PorkLion from "../../src/assets/images/pork-loin.png";
+import steak from "../../src/assets/images/steak.png";
+import creamy from "../../src/assets/images/creamy.png";
+import swahili from "../../src/assets/images/swahili.png";
+import lentil from "../../src/assets/images/lentil.png";
+import salmon from "../../src/assets/images/salmon.png";
+
 export const dishes = [
   {
     id: 1,
@@ -6,7 +15,7 @@ export const dishes = [
       "Crispy pizza with spiced chicken, sweet peppers, and a unique twist.",
     price: "$14.99",
     category: "Non-Veg",
-    image: "./src/assets/images/chicken-pizza.png",
+    image: Chicken,
   },
   {
     id: 2,
@@ -15,7 +24,7 @@ export const dishes = [
       "Flame-grilled beef, avocado, peri-peri aioli on a brioche bun.",
     price: "$12.99",
     category: "Non-Veg",
-    image: "./src/assets/images/sarabi-burger.png",
+    image: Burger,
   },
   {
     id: 3,
@@ -23,7 +32,7 @@ export const dishes = [
     description: "Tender pork with roasted root vegetables in a savory glaze.",
     price: "$16.99",
     category: "Non-Veg",
-    image: "./src/assets/images/pork-loin.png",
+    image: PorkLion,
   },
   {
     id: 4,
@@ -31,7 +40,7 @@ export const dishes = [
     description: "Prime steak with herb butter and layered fondant potatoes.",
     price: "$24.99",
     category: "Chef Specials",
-    image: "./src/assets/images/steak.png",
+    image: steak,
   },
   {
     id: 5,
@@ -40,7 +49,7 @@ export const dishes = [
       "Lake Victoria tilapia in a luscious coconut curry with spinach.",
     price: "$15.99",
     category: "Non-Veg",
-    image: "./src/assets/images/creamy.png",
+    image: creamy,
   },
   {
     id: 6,
@@ -48,7 +57,7 @@ export const dishes = [
     description: "Tender noodles with fresh seafood in a creamy coconut broth.",
     price: "$17.99",
     category: "Chef Specials",
-    image: "./src/assets/images/swahili.png",
+    image: swahili,
   },
   {
     id: 7,
@@ -57,7 +66,7 @@ export const dishes = [
       "Rich lentil bolognese with African spices, tossed with tagliatelle.",
     price: "$13.99",
     category: "Veg",
-    image: "./src/assets/images/lentil.png",
+    image: lentil,
   },
   {
     id: 8,
@@ -65,6 +74,6 @@ export const dishes = [
     description: "Pan-seared salmon over a vibrant mango-avocado salsa.",
     price: "$19.99",
     category: "Chef Specials",
-    image: "./src/assets/images/salmon.png",
+    image: salmon,
   },
 ];

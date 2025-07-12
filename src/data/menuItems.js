@@ -1,3 +1,13 @@
+import cucumber from "../../src/assets/images/cucumber.png";
+import mango from "../../src/assets/images/mango.png";
+import crispy from "../../src/assets/images/crispy.png";
+import mezze_pletter from "../../src/assets/images/mezze pletter.png";
+import spicy_pan from "../../src/assets/images/spicy pan.png";
+import gnocchi from "../../src/assets/images/gnocchi.png";
+import berry from "../../src/assets/images/berry.png";
+import pink_frosted from "../../src/assets/images/pink frosted.png";
+import decadent from "../../src/assets/images/decadent.png";
+
 export const menuItems = [
   // Appetizers
   {
@@ -6,7 +16,7 @@ export const menuItems = [
     description: "Fresh and light wraps with creamy cheese and crisp cucumber.",
     price: "$18",
     category: "appetizers",
-    image: "../src/assets/images/cucumber.png",
+    image: cucumber,
   },
   {
     id: 2,
@@ -15,7 +25,7 @@ export const menuItems = [
       "Creamy, fruity cheesecake with a tropical mango-passion fruit topping.",
     price: "$20",
     category: "appetizers",
-    image: "../src/assets/images/mango.png",
+    image: mango,
   },
   {
     id: 3,
@@ -23,7 +33,7 @@ export const menuItems = [
     description: "Deliciously crunchy, savory bites perfect for dipping.",
     price: "$15",
     category: "appetizers",
-    image: "../src/assets/images/crispy.png",
+    image: crispy,
   },
 
   // Main Courses
@@ -33,7 +43,7 @@ export const menuItems = [
     description: "Fresh and light wraps with creamy cheese and crisp cucumber.",
     price: "$18",
     category: "mains",
-    image: "../src/assets/images/mezze pletter.png",
+    image: mezze_pletter,
   },
   {
     id: 5,
@@ -42,7 +52,7 @@ export const menuItems = [
       "Creamy, fruity cheesecake with a tropical mango-passion fruit topping.",
     price: "$20",
     category: "mains",
-    image: "../src/assets/images/spicy pan.png",
+    image: spicy_pan,
   },
   {
     id: 6,
@@ -50,7 +60,7 @@ export const menuItems = [
     description: "Deliciously crunchy, savory bites perfect for dipping.",
     price: "$15",
     category: "mains",
-    image: "../src/assets/images/gnocchi.png",
+    image: gnocchi,
   },
 
   // Desserts
@@ -60,7 +70,7 @@ export const menuItems = [
     description: "Fresh and light wraps with creamy cheese and crisp cucumber.",
     price: "$18",
     category: "desserts",
-    image: "../src/assets/images/berry.png",
+    image: berry,
   },
   {
     id: 8,
@@ -69,7 +79,7 @@ export const menuItems = [
       "Creamy, fruity cheesecake with a tropical mango-passion fruit topping.",
     price: "$20",
     category: "desserts",
-    image: "../src/assets/images/pink frosted.png",
+    image: pink_frosted,
   },
   {
     id: 9,
@@ -77,6 +87,6 @@ export const menuItems = [
     description: "Deliciously crunchy, savory bites perfect for dipping.",
     price: "$15",
     category: "desserts",
-    image: "../src/assets/images/decadent.png",
+    image: decadent,
   },
 ];
