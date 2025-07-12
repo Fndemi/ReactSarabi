@@ -14,10 +14,10 @@ export default function Home() {
 
   return (
     <>
-      <Navbar /> {/* Your Navbar */}
+      <Navbar />
       <HeroCarousel />
-      <section id="our-story" className="py-16 bg-rose-100 dark:bg-[#4a3a3a] transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="our-story" >
+        <div>
          
           <OurStory onOpenChatbot={toggleChatbot} />
         </div>
